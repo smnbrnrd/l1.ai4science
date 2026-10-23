@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <title>L1.UE5 - L'IA pour les sciences</title>
+    <link rel="stylesheet" href="assets/katex.min.css">
+    <link rel="stylesheet" href="assets/slides.css">
+</head>
+<body>
+    <textarea id="source">
+class: middle, center, title-slide
+name: lecture1
+
+# L'IA pour les sciences et l'ingénierie
+## L1.UE5 - Initiation à l'Intelligence Artificielle
+<br><br>
+Simon BERNARD<br>
+[simon.bernard@univ-rouen.fr](mailto:simon.bernard@univ-rouen.fr)<br><br>
+.center.height-4em[![URN logo](assets/logo-urn-color.png)]
+
+---
+# Les succès récents de l'IA
+
+.center[**Reconnaissance d'images et de vidéos**]
+
+.center.width-80[
+    <video  preload="auto" autoplay loop controls>
+        <source src="./medias/sam2.mp4" type="video/mp4">
+    </video>
+    *[SAM 2](https://sam2.metademolab.com/demo), Facebook AI Research (2024)*
+]
+
+---
+# Les succès récents de l'IA
+
+.center[**Génération d'images et de vidéos**]
+
+.center.width-80[
+    <video  preload="auto" autoplay loop controls>
+        <source src="./medias/megaportraits.mp4" type="video/mp4">
+    </video>
+    *[MegaPortraits](https://neeek2303.github.io/MegaPortraits/), Samsung (2022)*
+]
+
+---
+# Les succès récents de l'IA
+
+.center[**Traitement du langage naturel**]
+
+.center.width-65[
+    <video preload="auto" autoplay loop controls class="framed">
+        <source src="./medias/claude.mp4" type="video/mp4">
+    </video>
+    *[Claude AI](https://claude.ai/), Anthropic*
+]
+
+---
+# Les succès récents de l'IA
+
+.center[**IA autonome**]
+
+.center[
+    <iframe width="700" height="400" src="https://www.youtube.com/embed/HYwekersccY?si=ZSMRaYB60wclJTCb&mute=1&autoplay=1" frameborder="0" allowfullscreen></iframe>
+    *[Large Behavior Models](https://example.com), Boston Dynamics & Toyota Research Institute (2025)*
+]
+
+---
+# Apprentissage automatique
+
+**Ces IA sont basées sur l'apprentissage automatique (*machine learning*)**, qui consiste à apprendre/entrainer des modèles prédictifs à partir de données exemples. 
+
+Le pipeline de l'apprentissage automatique est divisé en deux phases:
+- **L'apprentissage**: on apprend un modèle à partir des données d'apprentissage
+- **L'inférence**: on utilise le modèle pour prédire la sortie de chaque nouvelle donnée
+
+.center.width-80.mt-4[![](./medias/mlpipeline.png)]
+
+.footnote[Cf. les cours "fil rouge" de Jason PIQUENOT]
+
+---
+# Comment faire l'apprentissage?
+
+.row[
+.col-50[
+70 ans de recherche = une multitude de méthodes issues:
+- des statistiques
+- de l'optimisation mathématique
+- de la théorie de l'informaiton
+- du traitement du signal
+- de la théorie des jeux
+- ...
+]
+.col-50[
+.width-70[![](./medias/playground.gif)]
+]
+]
+
+.row[
+.col-48[
+.width-100[![](./medias/knn.gif)]
+]
+.col-48[
+.width-100[![](./medias/decisiontree.gif)]
+]
+]
+
+---
+# Comment faire l'apprentissage?
+
+Parmi ces méthodes, il y a les réseaux de neurones:
+- Dans les années 1950, inspiration du fonctionnement des neurones biologiques
+- Réseau de neurones = assemblage de plusieurs neurones (beaucoup!)
+- Apprentissage = ajuster les paramètres du réseau pour qu'il produise la bonne sortie pour chaque donnée en entrée
+
+.row.center.evenly[
+.col-45.vcenter[
+.width-90[![](./medias/linearmodel.webp)]
+]
+.col-45.vcenter[
+.width-90[![](./medias/neural_network.webp)]
+]
+]
+
+---
+# L'IA d'aujourd'hui $\approx$ Deep Learning
+
+Les **réseaux de neurones profonds** sont à la base des méthodes d'IA modernes
+- Plus il y a de neurones...
+- ... plus il y a de paramètres à apprendre
+- ... plus il faut de données d'apprentissage
+- ... plus l'apprentissage est coûteux en temps de calcul et en argent
+- ... mais plus le modèle est puissant et peut résoudre des problèmes complexes
+
+
+Par exemple, GPT-3 (le modèle de ChatGPT à sa sortie en 2020) .exponent[(1)]
+- $175$ milliards de paramètres
+- $350$ Go pour stocker le modèle
+- $950$ Go de textes pour l'apprentissage
+- $34$ jours de calculs, équivalent à $355$ années/GPU (et $4.6$ M$)
+
+.footnote[(1) GPT-4 (2023) est estimé à $10^{12}$ paramètres et $25,000$ GPUs pour un apprentissage sur 6 mois, mais il s'agit d'estimation car les détails exactes n'ont pas été publiés.]
+
+---
+# L'IA d'aujourd'hui $\approx$ Deep Learning
+
+Ces méthodes existent depuis les années 50, alors pourquoi ça ne fonctionne que depuis 2010?
+
+.row.center.evenly[
+.col-50[
+Abondance des données
+
+.width-80[![](./medias/imagenet.jpg)]
+]
+.col-50[
+Dispositifs de calcul puissants (GPU)
+
+.width-40[![](./medias/nvidia_a100.jpg)]
+]
+]
+.row.center.evenly[
+.col-50[
+Développement de logiciels dédiés
+
+.width-65[![](./medias/software_logos.png)]
+]
+.col-50[
+**Apprentissage de représentations**
+
+.width-50[![](./medias/image_features.png)]
+]
+]
+
+---
+# Apprentissage de représentations
+
+Une **représentation** est une manière de décrire une donnée brute (pixels, mots, mesures) par un vecteur de nombres, où l'information utile à la tâche est facilement accessible.
+
+.row[
+.col-49[
+**Approche classique**
+- On conçoit à la main les caractéristiques (*feature engineering*)
+- Demande une expertise du domaine
+- Difficile sur des données complexes (images, textes, signaux)
+]
+.col-2[]
+.col-49[
+**Apprentissage de représentations**
+- Le modèle apprend lui-même les caractéristiques utiles
+- Représentation et tâche sont apprises ensemble
+- Les couches profondes construisent des représentations de plus en plus abstraites
+]
+]
+
+.center.width-70.mt-2[![](./medias/representations.png)]
+
+---
+# Apprentissage de représentations
+## Illustration
+
+.center.width-80[![](./medias/demo_cnn.png)*[https://adamharley.com/nn_vis/](https://adamharley.com/nn_vis/)*]
+
+---
+class: middle, center
+
+# L'IA pour les sciences
+
+---
+# L'IA en science et en ingénierie
+
+**Applications numériques**
+- Données abondantes et bon marché (clics, images, textes)
+- Pas de besoin d'interprétabilité : le modèle est une "boîte noire"
+- Erreurs tolérées : peu d'impact si elles sont très minoritaires
+- Besoin en généralisation limité : les données d'entraînement sont représentatives des données futures
+
+**Science et ingénierie**
+- **Données rares et coûteuses** : une expérience ou une simulation peut durer des jours
+- Une bonne prédiction ne suffit pas : il faut une **validation physique ou expérimentale**
+- Erreurs à fort coût : sécurité, décision, publication
+- Le modèle doit **généraliser hors de ses données d'entraînement** : on lui demande d'extrapoler vers des conditions nouvelles
+
+**L'IA ne doit pas juste être performante, elle doit être cohérente avec les lois scientifiques déjà connues.**
+
+---
+# Les tâches sont les mêmes, les objets changent
+
+<table style="margin: 1em auto; font-size: 0.8em; border-collapse: collapse;">
+  <thead>
+    <tr style="border-bottom: 2px solid #1f4e79;">
+      <th style="text-align: left; padding: 0.4em 0.6em;">Objet</th>
+      <th style="text-align: left; padding: 0.4em 0.6em;">Exemple</th>
+      <th style="text-align: left; padding: 0.4em 0.6em;">Ce qui le rend difficile</th>
+      <th style="text-align: left; padding: 0.4em 0.6em;">Méthode adaptée</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Tableau de mesures</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Propriétés d'un matériau</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Peu de données, bruit</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Modèles classiques (régression, arbres, processus gaussiens)</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Image instrumentale</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Microscopie, astronomie</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Très grandes images, peu d'annotations</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Réseaux convolutifs</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Séquence temporelle</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Capteurs, climat</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Dynamique physique, non-stationnarité</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Réseaux récurrents, transformers</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Graphe</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Molécules, réseaux</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Structure relationnelle</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Réseaux sur graphes</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc; background-color: #e7fffa;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Champ</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Fluide, température</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Sortie de dimension infinie, lois physiques</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Apprentissage d'opérateurs, réseaux informés par la physique</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+# Équations aux dérivées partielles (EDP)
+
+- En science, la grandeur recherchée dépend souvent de l'espace et du temps (e.g. température d'une pièce) → on parle de **champ** $u(x, t)$
+- Ces champs sont en général régis par des **équations aux dérivées partielles** (EDP)
+- Dérivée partielle de $u(x\_1, \ldots, x\_n) : \mathbb{R}^n \to \mathbb{R}$:
+$$
+  \frac{\partial u}{\partial x\_i} = \lim\_{\Delta x\_i \to 0} \frac{u(x\_1, \ldots, x\_i + \Delta x\_i, \ldots, x\_n) - u(x\_1, \ldots, x\_i, \ldots, x\_n)}{\Delta x\_i}
+$$
+i.e. l'amplitude de la variation de $u$ selon la direction $x\_i$
+- Équations aux dérivées partielles (EDP):
+$$
+  F\left(x\_1, \ldots, x\_n, u, \frac{\partial u}{\partial x\_1}, \ldots, \frac{\partial u}{\partial x\_n}, \frac{\partial^2 u}{\partial x\_1^2}, \frac{\partial^2 u}{\partial x\_1 \partial x\_2}, \ldots \right) = 0
+$$
+
+---
+# Équations aux dérivées partielles (EDP)
+
+- Comprendre et résoudre ces équations est crucial pour de nombreuses applications scientifiques et industrielles : simulation aérodynamique, prévision météorologique, modélisation biologique, etc.
+- **Les solveurs numériques sont coûteux en temps, intensifs en calcul et parfois complexes**
+
+.row[
+.col-50[
+.center.width-80[![](./medias/dynamicalsystem_examples.png)*Yuan YIN, soutenance de thèse, Sorbonne Université, 2023*]
+]
+.col-50[
+.center.width-50[![](./medias/Flow_around_a_wing.gif)]
+.center.width-70[![](./medias/Cylinder_flow.gif)]
+]
+]
+- **Question** : peut-on apprendre à résoudre une EDP à partir de données, ou de la physique seule ?
+
+---
+# Pourquoi c'est difficile ?
+
+- Pour entrainer un réseau de neurones à résoudre une EDP, **il faut beaucoup de données**
+- Quelle données? des simulations numériques, des mesures expérimentales, des observations réelles
+- Obtenir ces données est très coûteux en temps et en ressources, parfois même impossible
+
+
+<br>
+Exemple en mécanique des fluides numérique (Naiver-Stokes)
+
+.row[
+.col-45[
+- Besoin de simulations précises et longues
+- Plusieurs jours de calculs par simulation
+- Besoin de milliers de simulations pour couvrir tous les cas possibles
+]
+.col-55[
+.row.center.evenly[
+
+.width-90[![](./medias/navier-stokes-simulation.gif)]
+
+.width-90[![](./medias/navier-stokes-prediction.gif)]
+]
+.figcaption[*Gauche: exemple d'une simulation numérique courte et de faible qualité; <br>Droite: simulation obtenue par un réseau de neurones entrainé sur ce type de simulations*]
+]
+]
+
+---
+# Comment faire ?
+
+**Scientific Machine Learning (SciML)** = combiner les méthodes d'apprentissage automatique avec la physique et les mathématiques
+
+.row[
+.col-50[
+Plusieurs approches:
+- **Physics-Informed Neural Networks (PINN)**: apprendre la solution d'une EDP en s'appuyant sur l'équation
+- **Neural Operator**: apprendre l'opérateur qui associe au paramètres de l'EDP sa solution complète
+- **Hybrid Physics-ML**: combiner un modèle physique avec un modèle appris pour corriger ou accélerer
+]
+.col-50[
+.center.width-80[![](./medias/sciml.png)]
+]
+]
+
+---
+# Physics-Informed Neural Network (PINN) .exponent[(1)]
+
+- Réseau de neurones entrainé pour approximer $u_\theta(x, t)$ directement
+- Apprentissage pour optimiser la fidélité aux données et la fidélité à l'EDP
+- Les dérivées de $u_\theta$ s'obtiennent par **différentiation automatique**
+
+.center.width-75[![](./medias/pinnarchitecture.png)]
+
+.footnote[(1) Maziar Raissi, Paris Perdikaris, George Em Karniadakis, "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations", Journal of Computational Physics, 2019]
+
+---
+# Example: équation de Burgers
+
+Soit $\nu = 0.01 / \pi$, $x \in [-1, 1]$, $t \in [0, 1]$ et $u: [-1, 1] \times [0, 1] \to \mathbb{R}$:
+
+.row[
+.col-40[
+$$
+\begin{cases}
+  \frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} - \nu \frac{\partial^2 u}{\partial x^2} = 0\\\\
+  u(x,0) = -\sin(\pi x)\\\\
+  u(-1,t) = u(1,t) = 0
+\end{cases}
+$$
+
+.mt-5[Ci-contre: Réseau entrainé sur:
+- $100$ points tels que $t=0$, $x=-1$ ou $x=1$ 
+- $10,000$ points de collocation dans $[-1, 1] \times [0, 1]$]
+]
+.col-55.center[
+.center.width-100.mt-2[![](./medias/pinnburgers.png)]
+]
+]
+
+---
+# Neural Operator
+
+.row.mt-2[
+.col-60[
+- Les PINN apprennent la solution d'une EDP avec des conditions initiales et aux limites fixées
+- Si on veut résoudre la même EDP avec **d'autres conditions, il faut ré-entrainer le réseau**
+- Objectif : apprendre l'**opérateur** $\mathcal{G} : a \mapsto u$, qui associe à une entrée (conditions, paramètres) la solution complète
+- A **neural operator** apprend $\mathcal{G}$ à partir d'un ensemble d'instance déjà résolues
+]
+.col-5[]
+.col-35.center[
+.width-95[![](./medias/neuraloperator.png)]
+]
+]
+
+---
+# Fourier Neural Operator (FNO) .exponent[(1)]
+
+- Apprend des représentations de $a$ dans l'espace de Fourier (branche du haut): dynamique globale
+- Apprend aussi des représentations locales dans l'espace physique (branche du bas): dynamique locale
+
+.center.width-75[![](./medias/fno.png)
+
+]
+
+.footnote[(1) Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Andrew Stuart, Anima Anandkumar, Kaushik Bhattacharya, "Fourier Neural Operator for Parametric Partial Differential Equations", ICLR 2021]
+
+---
+# Comparaison PINN et FNO
+
+<table style="margin: 1em auto; font-size: 1em; border-collapse: collapse;">
+  <thead>
+    <tr style="border-bottom: 2px solid #1f4e79;">
+      <th style="text-align: left; padding: 0.4em 0.6em;">Critère</th>
+      <th style="text-align: left; padding: 0.4em 0.6em;">PINN</th>
+      <th style="text-align: left; padding: 0.4em 0.6em;">FNO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Données nécessaires</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Peu, voire aucune</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Beaucoup (paires entrée-sortie)</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Physique</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Imposée dans la fonction de perte</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Apprise à partir des données</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Nouveaux paramètres</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Réentraînement</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Évaluation immédiate</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="padding: 0.4em 0.6em; vertical-align: top;"><b>Difficulté</b></td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Optimisation raide</td>
+      <td style="padding: 0.4em 0.6em; vertical-align: top;">Coût de génération des données</td>
+    </tr>
+  </tbody>
+</table>
+
+.center[Ces principes sont encore en développement, mais ils sont déjà utilisés sur des problèmes réels.]
+
+---
+class: middle, center
+
+# AI4Science : Les exemples marquants
+
+---
+# Prévisions météorologiques
+
+.row[
+.col-55[
+- **GraphCast** (Google DeepMind, 2023) .exponent[(1)]
+- Training data: 40+ years of observations (ECMWF)
+- Prediction of weather fields up to 10 days ahead
+- 1.2 billion param., 128 TPUv4 chips for training
+
+.center.width-80.mt-2[![](./medias/graphcast-result.gif)]
+]
+.col-45[
+.center.width-100.mt-2[![](./medias/graphcast-model.png)*[https://deepmind.google/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/](https://deepmind.google/blog/graphcast-ai-model-for-faster-and-more-accurate-global-weather-forecasting/)*]
+]
+]
+
+.footnote[(1) Renamed with newer versions: GenCast in 2024 and WeatherNext in 2025 ([github](https://github.com/google-deepmind/weathernext))]
+
+---
+# Carte d'activation cardiaque
+
+- Fibrillation auriculaire : le cœur bat trop lentement, trop rapidement ou de manière irrégulière
+- Diagnostic avec une carte d'activation électro-anatomiques (activité électrique du coeur)
+- Seulement quelques mesures pour produire toute l'activité $\rightarrow$ interpolation non-trivial
+- **PINN pour la génération de carte d'activation cardiaque complète à partir de quelques mesures**
+
+.row[
+.col-55.vcenter[
+.center.width-80.mt-2[![](./medias/pinn-cardiac-activation2.jpg)]
+]
+.col-45.vcenter[
+.center.width-100.mt-2[![](./medias/pinn-cardiac-activation.jpg)]
+]
+]
+
+.figcaption[Sahi Costabal et al., "Physics-Informed Neural Networks for Cardiac Activation Mapping", Frontiers in Physics, 2020]
+
+---
+# Fusion nucléaire
+
+- Fusion nucléaire = fusion de deux atomes pour produire de l'énergie
+- Énergie performante, propre et quasi inépuisable (combustible naturel, rendement élevé)
+- Expérimental, car très compliqué à maîtriser à cause de l'état instable du plasma utilisé pour la fusion
+- **IA pour modéliser et contrôler le plasma dans les réacteurs à fusion**
+
+.row[
+.col-55.vcenter[
+.center.width-80.mt-2[![](./medias/nuclear-fusion-model.webp)]
+]
+.col-45.vcenter[
+.center.width-100.mt-2[![](./medias/nuclear-fusion-controled-by-ai.gif)]
+]
+]
+
+.figcaption[Degrave et al., "Magnetic control of tokamak plasmas through deep reinforcement learning", Nature, 2023]
+
+---
+# Prédiction de la structure des protéines
+
+- Les cellules vivantes sont constituées de protéines, qui participent aux fonctions essentielles de la vie
+- Une protéine est une chaîne d'acides aminés, déterminée par le code génétique (ADN)
+- Cette chaîne se replie en une structure 3D spécifique, à la faveur des intéractions chimiques
+- **Comprendre, prédire et maîtriser ce repliement est un enjeu majeur en biologie et en médecine**
+
+.row[
+.col-50.vcenter[
+.center.width-100.mt-2[![](./medias/dna-rna-protein.png)]
+]
+.col-50.vcenter[
+.center.width-75.mt-2[![](./medias/protein-folding.jpg)]
+]
+]
+
+---
+# Prédiction de la structure des protéines
+
+.row[
+.col-70[
+- **AlphaFold 2 de Google DeepMind (2021)**
+- Entraîné sur 200k+ structures déjà connues
+- Prédictions pour presque toutes les protéines connues (∼ 200M)
+- **Principes d'IA inspirés des LLM et avec une génération itérative**
+
+<video class="width-100" loop controls preload="auto" autoplay>
+    <source src="medias/alphafold.mp4" type="video/mp4">
+</video>
+]
+.col-30[
+.center.width-100[![](./medias/alphafold-nature.png)]
+]
+]
+
+---
+# En (très) résumé...
+
+**IA pour les sciences: le nouveau graal de la communauté scientifique** 
+- environ 80 150 publications sur l’IA en sciences naturelles en 2025, soit +26 % en un an.
+- Objectif: combiner les connaissances scientifiques et l'apprentissage profond
+- Déjà beaucoup d'approches prometteuses (PINN et FNO ne sont que deux exemples)
+
+
+**Des succés réels**
+- Par ex., plusieurs modèles météo IA sont déployés opérationnellement (prévisions jusqu'à 60 jours en moins de 4 minutes sur un GPU)
+- Mais **encore beaucoup de problèmes ouverts**: interprétabilité, généralisation (on y est pas encore), problème inverse (découvrir des lois de la physique à l'aide de l'IA)
+- Énormement de potentiel pour faire progresser les sciences et l'ingénierie **mais est-ce que l'IA remplace l'expérimentation?**
+
+
+Une ingrédient clé pour les *World Models* .exponent[✲]?...
+
+.footnote[✲ les World models sont des IA capables de comprendre la dynamique du monde réel, y compris la physique et les propriétés spatiales]
+
+    </textarea>
+    <script src="assets/remark.min.js"></script>
+    <script src="assets/katex.min.js"></script>
+    <script src="assets/auto-render.min.js"></script>
+    <script>
+        // Remark configuration (more: https://github.com/gnab/remark/wiki/Configuration)
+        let options = {
+            ratio: '4:3',
+            slideNumberFormat: '%current% / %total%',
+            highlightLanguage: 'python',
+            highlightStyle: 'github',
+        };
+
+        /**
+         * Render math expressions using KaTeX. It will render math expressions in the entire document body after the DOM content is loaded.
+         * The delimiters for math expressions are defined as follows:
+         * - Display math: $$...$$ or \[...\]
+         * - Inline math: $...$ or \(...\)
+         * (from https://github.com/gnab/remark/wiki/LaTeX-Using-KaTeX)
+         */
+        let renderMath = function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false},
+                ]
+            });
+        };
+
+        // Create the slideshow
+        let slideshow = remark.create(options, renderMath);
+
+        /**
+         * When DOM is loaded add the "target=_blank" attribute to all links that have a "http" or "https" protocol.
+         * This will make external links open in a new tab.
+         */
+        document.addEventListener("DOMContentLoaded", function() {
+            let links = document.querySelectorAll("a[href^='http']");
+            links.forEach(function(link) {
+                link.setAttribute("target", "_blank");
+            });
+        });
+    </script>
+
+</body>
+</html>
